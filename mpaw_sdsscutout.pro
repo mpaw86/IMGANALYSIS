@@ -57,7 +57,7 @@ Function mpaw_sdsscutout, imgname, stampname, ra, dec, stampsize
     Endif
     
     ;; Find the central pixel's coordinates (fiducial)
-    cenpix = my_cenpix(ra, dec, ra_ref, dec_ref, x_ref, y_ref, wcs)
+    cenpix = mpaw_cenpix(ra, dec, ra_ref, dec_ref, x_ref, y_ref, wcs)
     
     ;; Rotate the image arount the objects centre
     ;; - remeber to set /pivot keyword !!
