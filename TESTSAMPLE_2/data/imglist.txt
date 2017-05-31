@@ -1,4 +1,0 @@
-stamp_6r.fits
-stamp_8r.fits
-stamp_9r.fits
-stamp_15r.fits
