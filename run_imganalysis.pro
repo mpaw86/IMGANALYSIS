@@ -8,10 +8,10 @@
 ;
 ; CALLING SEQUENCE:
 ;
-;	run_imganalysis, sample, [imgname]
-;   ** Input directory needs to be spectified - line 48
+;	run_imganalysis, dir, sample, [imgname]
 ;            
 ;       INPUT: 
+;       dir: a string - path to the working directory
 ;       sample: a string pointing to the sample to be analysed
 ;  
 ;       OPTIONAL INPUT:
@@ -42,9 +42,9 @@
 ;       FITSCLEANIMG: Optional output - images cleared of point sources     
 ;       FITSPIXELMAP: Optional output - binary pixel map in a fits file 
 ;      
-; EXAMPLE:
-;       run_imganalysis, 'z1m1/PSB', 'img_1', /fitspixelmap
-;
+; EXAMPLES:
+;        run_imganalysis, 'path', 'TESTSAMPLE_1', /imglist, /aperpixmap, /savepixelmap, /savecleanimg, /sdsscutout, /sdsshdr
+;        run_imganalysis, 'path', 'TESTSAMPLE_2', /imglist, /aperpixmap, /savepixelmap, /savecleanimg
 ;
 ; DEPENDENCIES: 
 ;            
@@ -84,16 +84,20 @@
 ; MODIFICATION HISTORY:
 ;
 ; 	Written by:	Milena Pawlik, August 2016, based on an older version from March 2014. 
-;	
+;   Last modified by: Milena Pawlik, June 2017
 ;-
 
-PRO RUN_IMGANALYSIS, sample, imgname, imglist=imglist, sdsscutout=sdsscutout, sdsshdr=sdsshdr, largeimg=largeimg, noskybgr=noskybgr, noimgclean=noimgclean, aperpixmap=aperpixmap, nopixelmap=nopixelmap, asprofile=asprofile, aout=aout, gfrac=gfrac, savepixelmap=savepixelmap, savecleanimg=savecleanimg, sav=sav
+PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutout, sdsshdr=sdsshdr, largeimg=largeimg, noskybgr=noskybgr, noimgclean=noimgclean, aperpixmap=aperpixmap, nopixelmap=nopixelmap, asprofile=asprofile, aout=aout, gfrac=gfrac, savepixelmap=savepixelmap, savecleanimg=savecleanimg, sav=sav
     
     ;;------------------------------------------------------------------
     ;; Directories
     ;;------------------------------------------------------------------
     ;dir = '/Users/Milena/Documents/St_Andrews/Projects/SEDMorph/Samples/'
-    dir = ''
+    If n_elements(dir) eq 0 then begin
+       print, 'ERROR: Path to working directory unspecified!'
+       stop 
+    Endif
+    
     dir_in = dir+sample+'/data/'
     dir_out = dir+sample+'/output/'    
     If file_test(dir_out) eq 0 then spawn, 'mkdir '+ dir_out    
