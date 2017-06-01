@@ -235,14 +235,14 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
         struct = {id:0L, As:fltarr(n_elements(nsig)), As90:fltarr(n_elements(nsig))}
         out4 = replicate(struct,numimgs)
         ;outfile4 = 'asprof_'+filters[f]+'band
-        outfile4 = 'asprof
+        outfile4 = 'asprof'
         ;;------------------------------------------------------------------
         ;; Analysis 
         ;;------------------------------------------------------------------
    
          For i = 0, numimgs-1 do begin
-             
-             tic 
+            ;tic 
+            time_start = systime(1)
   
                 out(i).id = i+1
                 out1(i).id = i+1
@@ -514,7 +514,7 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
         
                 Endif 
                 
-                time = toc()
+                time = systime(1)-time_start
        
                 ;; ---------------------------------------
                 ;; --- Save parameters in output files ---
