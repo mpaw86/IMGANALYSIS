@@ -8,10 +8,10 @@
 ;
 ; CALLING SEQUENCE:
 ;
-;	run_imgprep, sample, [imgname]
-;   ** Input directory needs to be spectified - line 48
+;	run_imgprep, dir, sample, [imgname]
 ;            
-;       INPUT: 
+;       INPUT:
+;       dir: a string - path to the working directory 
 ;       sample: a string pointing to the sample to be analysed
 ;  
 ;       OPTIONAL INPUT:
@@ -26,8 +26,9 @@
 ; KEYWORD PARAMETERS:
 ;      
 ;       
-; EXAMPLE:
-;       run_imgprep, 'z1m1/PSB', 'img_1'
+; EXAMPLES:
+;       run_imgprep, 'path', 'TESTSAMPLE_1', /sdss, /cutout
+;       run_imgprep, 'path', 'TESTSAMPLE_2', /trim
 ;
 ;
 ; DEPENDENCIES: 
@@ -39,19 +40,21 @@
 ; MODIFICATION HISTORY:
 ;
 ; 	Written by:	Milena Pawlik, August 2016, based on an older version from March 2014. 
-;	
+;	Last modified by: Milena Pawlik, June 2017
 ;-
 
-PRO RUN_IMGPREP, sample, imgname, sdss=sdss, cutout=cutout, trim=trim, centre=centre, flagsources=flagsources
+PRO RUN_IMGPREP, dir, sample, imgname, sdss=sdss, cutout=cutout, trim=trim, centre=centre, flagsources=flagsources
     
     ;;------------------------------------------------------------------
     ;; Directories
     ;;------------------------------------------------------------------
     ;dir = '/Users/Milena/Documents/St_Andrews/Projects/SEDMorph/Samples/'
-    dir = ''
     dir_in = dir+sample+'/data/'
     
-    print, dir_in
+    If n_elements(dir) eq 0 then begin
+       print, 'ERROR: Path to working directory unspecified!'
+       stop 
+    Endif
     
     dir_out = dir+sample+'/data/'    
     If file_test(dir_out) eq 0 then spawn, 'mkdir '+ dir_out  
