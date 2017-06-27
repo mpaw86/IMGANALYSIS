@@ -76,10 +76,8 @@ The path to the input directory is specified as an input parameter. The input di
 \i0 \cf0 -  set if particular order of images being analysed is preferred; the order should be specified in 
 \i \cf2 \'91TESTSAMPLE/data/imglist.txt\'92
 \i0  \cf0  (list of image names); if not set, the code will analyse *all* images within the parent directory in an alphabetical order;\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 \cf2 		/savepixelmap \cf0 - save the pixel maps in *.fits files;\
                  \cf2 /savecleanimg\cf0  - save the `clean\'92 images in *.fits files;\
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 
 \i \cf2 		/noskybgr 
 \i0 \cf0 - if images already sky background-subtracted, set to skip this step during the analysis;\
@@ -88,7 +86,7 @@ The path to the input directory is specified as an input parameter. The input di
 \i0 \cf0  - skip the image cleaning step (by default, the code cleans the images from nearby point sources that don\'92t overlap with the object of interest);\
 
 \i \cf2 		
-\i0 \cf2 /nopixelmap \cf0 - use preprepared object pixel maps if available (e.g. from a previous run); saves time.\
+\i0 /nopixelmap \cf0 - use preprepared object pixel maps if available (e.g. from a previous run); saves time.\
 \
 \
 
@@ -117,7 +115,7 @@ The path to the input directory is specified as an input parameter. The input di
 
 \b0 \
 
-\i \cf2 		run_imgprep, \'91path\'92, \'91TESTSAMPLE\'92, /sdsscutout\cf0 , \cf2 /sdsshdr\cf0  
+\i \cf2 		run_imganalysis, \'91path\'92, \'91TESTSAMPLE\'92, /sdsscutout\cf0 , \cf2 /sdsshdr\cf0  
 \i0 \
 		\
 		Optional tasks as in 2.1.2.\
@@ -134,8 +132,9 @@ Image information is stored in
 \i \cf4 structpar_*
 \i0 \cf0  files.\
 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 
-\i 	imginfo_*\
+\i \cf0 	imginfo_*\
 \
 	
 \b id 
@@ -259,8 +258,9 @@ Image information is stored in
 \i0\b0  - error associated with n;
 \i\b \
 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 
-\i0\b0 \
+\i0\b0 \cf0 \
 \
 \
 	\
