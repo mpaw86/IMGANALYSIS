@@ -43,7 +43,7 @@
 ;	Last modified by: Milena Pawlik, June 2017
 ;-
 
-PRO RUN_IMGPREP, dir, sample, imgname, sdss=sdss, cutout=cutout, trim=trim, centre=centre, flagsources=flagsources
+PRO run_imgprep, dir, sample, imgname, sdss=sdss, cutout=cutout, trim=trim, centre=centre, flagsources=flagsources
     
     ;;------------------------------------------------------------------
     ;; Directories
@@ -90,6 +90,7 @@ PRO RUN_IMGPREP, dir, sample, imgname, sdss=sdss, cutout=cutout, trim=trim, cent
             
             ;; --- Default cutout size --- 
             cutoutsize = [141,231]
+            ;cutoutsize = [183,231]
  
             ;; - Rename the images from the SDSS database
             If n_elements(imgname) eq 0 then begin
