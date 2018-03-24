@@ -4,18 +4,13 @@ PRO RUN_ALL, mockimgs=mockimgs
 
     If not(keyword_set(mockimgs)) then begin
         
-        filters = ['r']
-        ;samples = ['z1m2/main_qPSB','z1m2/main_agnPSB','z1m2/main_ePSB','z1m2/main_dPSB','z1m2/control_PAS','z1m2/control_SF','z1m2/control_SBpure','z1m2/control_SFdusty','z1m2/control_AGN']
-        samples = ['z1m1/main_ePSB']
-        dir = ''
+        path = '/Users/Milena/Documents/St_Andrews/Projects/MaNGA/'
+        samples = ['MaNGA_SDSS']
 
-        For f = 0, n_elements(filters)-1 do begin
-            filter = filters[f]
-            For i = 0, n_elements(samples)-1 do begin
-                sample = 'SDSSPSB/'+samples[i]
-                run_imgprep, dir, sample, filter, /sdss, /cutout
-                run_imganalysis, dir, sample, /imglist, /sdsscutout, /sdsshdr, /largeimg, /savecleanimg, /savepixelmap
-            Endfor
+        For i = 0, n_elements(samples)-1 do begin
+            sample = samples[i]
+           ; run_imgprep, path, sample, /sdss, /cutout
+            run_imganalysis, path, sample, /imglist, /sdsscutout, /sdsshdr, /largeimg, /savecleanimg, /savepixelmap
         Endfor
         
     Endif else begin
@@ -33,8 +28,8 @@ PRO RUN_ALL, mockimgs=mockimgs
                  
                ; If (f ne 0 or o ne 0) then run_mockimganalysis, '2xSc_13',  orientations[o],filters[f], $
                 ;  /convertunits, /savepixelmap
-               run_mockimgprep, '2xSd_07',orientations[o], filters[f], /trim
-               run_mockimganalysis, '2xSd_07',  orientations[o], filters[f], /convertunits, /aperpixmap, /savepixelmap
+               run_mockimgprep, 'Sc_Scp3_13',orientations[o], filters[f], /trim
+               run_mockimganalysis, 'Sc_Scp3_13',  orientations[o], filters[f], /convertunits, /aperpixmap, /savepixelmap
                  
             Endfor
             

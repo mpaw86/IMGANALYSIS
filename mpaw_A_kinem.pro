@@ -1,4 +1,4 @@
-Function mpaw_A_kinem, img, pixelmap, centroid, rmax, angle, dir, name, shape=shape
+Function mpaw_a_kinem, img, pixelmap, centroid, rmax, angle, dir, name, shape=shape
 
     cenpix_x = centroid[0]
     cenpix_y = centroid[1]

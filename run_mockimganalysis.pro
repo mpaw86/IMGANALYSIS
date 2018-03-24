@@ -17,18 +17,18 @@ PRO RUN_MOCKIMGANALYSIS, simulation, orientation, filter, singleimg=singleimg, c
     ;;------------------------------------------------------------------
     ;; Directories
     ;;------------------------------------------------------------------
-    dir = '/Users/Milena/Documents/St_Andrews/Projects/SEDMorph/Simulations/GADGET3/'
+    dir = '/Users/Milena/Documents/St_Andrews/Projects/SEDMorph/Simulations/GADGET3/RERUN/'
     dir_in = dir+simulation+'/imgs_'+filter+'/orien_'+orientation+'/'  
     dir_out = dir+simulation+'/output/'    
     If file_test(dir_out) eq 0 then spawn, 'mkdir '+ dir_out    
        
-    imagesize = 303
+    imagesize = 147
     
     ;;------------------------------------------------------------------
     ;; Images
     ;;------------------------------------------------------------------  
     If not(keyword_set(singleimg)) then begin
-            imgs = file_search(dir_in+'sdssimage_z0.040_tauv1.0_mu0.3_dust_*.fits',count=numimgs)
+            imgs = file_search(dir_in+'sdssimage_z0.040_tauv1.0_mu0.3_*.fits',count=numimgs)
     Endif else begin
         ;; Finish!
     Endelse
@@ -123,7 +123,7 @@ PRO RUN_MOCKIMGANALYSIS, simulation, orientation, filter, singleimg=singleimg, c
     ;;------------------------------------------------------------------
     ;; Analysis 
     ;;------------------------------------------------------------------
-    numimgs = 150
+   ; numimgs = 150
     
      For i = 0, numimgs-1 do begin
          
@@ -268,7 +268,7 @@ PRO RUN_MOCKIMGANALYSIS, simulation, orientation, filter, singleimg=singleimg, c
                 photpar.kk = kk[f]
                 photpar.gain = gain[f]
                 photpar.darkvar = darkvar[f]
-                photpar.b = b  [f]
+                photpar.b = b[f]
                 result = mpaw_sbprof(img,aperpixmap,bpix,r_aper,photpar,/err,/cog) 
            
                 rad = result.rad
@@ -281,13 +281,13 @@ PRO RUN_MOCKIMGANALYSIS, simulation, orientation, filter, singleimg=singleimg, c
     
                 ;; --- Asymmetry (see Conselice et al. 2000)
                 angle = 180.
-                result = mpaw_A(img,pixmap,aperpixmap,apix,rmax,angle,/noisecorrect)
+                result = mpaw_a(img,pixmap,aperpixmap,apix,rmax,angle,/noisecorrect)
                 A = result[0]
                 Abgr = result[1]
     
                 ;; --- Shape asymmetry ---
-                As = mpaw_A(pixmap,pixmap,aperpixmap,apix,rmax,angle)
-                As90 = mpaw_A(pixmap,pixmap,aperpixmap,apix,rmax,90.)
+                As = mpaw_a(pixmap,pixmap,aperpixmap,apix,rmax,angle)
+                As90 = mpaw_a(pixmap,pixmap,aperpixmap,apix,rmax,90.)
     
            
                 ;; --- Clumpiness (see) ---
@@ -296,7 +296,7 @@ PRO RUN_MOCKIMGANALYSIS, simulation, orientation, filter, singleimg=singleimg, c
                     aperpixmapcut = mpaw_aperpixmap(npix,rcut,9,0.1)
             
                     aperpixmapcut = mpaw_apercentre(aperpixmapcut,bpix)
-                    result = mpaw_S(img,pixmap,aperpixmap,width,aperpixmapcut,/noisecorrect,/sout)
+                    result = mpaw_s(img,pixmap,aperpixmap,width,aperpixmapcut,/noisecorrect,/sout)
                     S = result[0]
                     Sbgr = result[1]
                 Endif else begin

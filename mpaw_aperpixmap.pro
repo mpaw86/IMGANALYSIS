@@ -5,6 +5,7 @@
 
 Function mpaw_aperpixmap, npix, rad, nsubpix, frac
     
+        npix = long(npix)
         ;imgsize = size(img)
         ;npix = imgsize[1]
         

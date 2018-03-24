@@ -3,7 +3,7 @@
 ;; Optionam arguments: -apermaskcut (if /sout set)
 
 
-Function mpaw_S, img, pixelmap, apermask, width, apermaskcut, noisecorrect=noisecorrect, sout=sout
+Function mpaw_s, img, pixelmap, apermask, width, apermaskcut, noisecorrect=noisecorrect, sout=sout
         
     imgSmooth = filter_image(img,smooth=width)
     imgResid = abs(img - imgSmooth)      
@@ -31,7 +31,7 @@ Function mpaw_S, img, pixelmap, apermask, width, apermaskcut, noisecorrect=noise
         ;; - Determine pixels to be masked out
         element = replicate(1,9,9)
         mask = dilate(pixelmap,element)
-        maskid = where(mask eq 1) 
+        maskind = where(mask eq 1) 
         ;; - Determine background pixels
         bgrind = where(mask ne 1)
         bgrpix = img[bgrind]
@@ -72,10 +72,14 @@ Function mpaw_S, img, pixelmap, apermask, width, apermaskcut, noisecorrect=noise
            
             Endif else begin
                 Sbgr = -99
+                print, 'WARNING: Number of galaxy pixels is 0!'
+                stop
             Endelse
        
         Endif else begin
             Sbgr = -99
+            print, 'WARNING: Not enough sky pixels'
+            stop
         Endelse
     
         return, [S, Sbgr]

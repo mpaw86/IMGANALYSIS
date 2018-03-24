@@ -1,4 +1,4 @@
-Function mpaw_maxIpix, img, objmask
+Function mpaw_maxipix, img, objmask
     
     brightpix = fltarr(2)
               

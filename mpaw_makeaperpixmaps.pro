@@ -10,7 +10,7 @@ PRO mpaw_makeaperpixmaps, npix, annuli=annuli, silent=silent
     aper = replicate(struct, numaper)
     
     For i = 0, numaper-1 do begin
-        
+     
         aperpixmap = mpaw_aperpixmap(npix,r_aper[i],9,0.1)
        ; aperpixmap = mpaw_aperpixmap(npix,[cenpix,cenpix],r_aper[i],9,0.1)
         ;aperpixmap = mpaw_aperpixmap(npix,cenpix,r_max,99,0.01)

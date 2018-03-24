@@ -16,7 +16,7 @@ PRO RUN_MOCKIMGPREP, simulation, orientation, filter, singleimg=singleimg, trim=
     ;;------------------------------------------------------------------
     ;; Directories
     ;;------------------------------------------------------------------
-    dir = '/Users/Milena/Documents/St_Andrews/Projects/SEDMorph/Simulations/GADGET3/'
+    dir = '/Users/Milena/Documents/St_Andrews/Projects/SEDMorph/Simulations/GADGET3/RERUN/'
     dir_in = dir+simulation+'/imgs_'+filter+'/orien_'+orientation+'/'  
     dir_out = dir_in   
        

@@ -5,7 +5,7 @@
 
 ;; *** NOTE: This is different from the traditional approach (see e.g. Conselice et al. 2000) where the measurement of A is made for a pre-determined initial centroid and its neighbouring 8 pixels and only if one of the neighbouring pixels yields a lower value than the centroid, the procedure is repeated for that neigbouring pixel. Our approach reduces the chance of being stuck in a local asymmetry minimum (not found by Conselice at al 2000 but perhaps could be the case in more messed up galaxies).
 
-Function mpaw_minApix, img, objmask, apermask
+Function mpaw_minapix, img, objmask, apermask
     
     imgsize = size(img)
     npix = imgsize[1]

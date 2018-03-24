@@ -16,8 +16,8 @@ Function mpaw_sbprof, img, maxaper, centroid, radii, photpar, err=err, cog=cog
     apersize = size(pix)
     numpix = long(apersize[1])
     ;aperarea = numpix*(1./(2.5))^2.
-    aperarea = numpix
-    tot_flux = flux[0] * aperarea
+    aperarea = numpix   
+    tot_flux = flux[0] * float(aperarea)
     
     ;; --- Calculate radial profiles and cumulative profiles ---
     numaper = n_elements(radii)
@@ -41,12 +41,14 @@ Function mpaw_sbprof, img, maxaper, centroid, radii, photpar, err=err, cog=cog
             print, 'ERROR! MPAW_SBPROFCOUNTS: Aperture pixel map not found. Rerun with keyword /aperpixmap.'
             stop
         Endif
-                     
+                        
         masksize = size(tempmask)
         If npix gt masksize[1] then begin
+            print, npix, masksize[1]
             print, 'ERROR! MPAW_SBPROFCOUNTS: Incorrect size of aperture pixel map! Rerun with keyword /aperpixmap.'
             stop
         Endif else if npix lt masksize[1] then begin
+             print, npix, masksize[1]
             print, 'WARNING! MPAW_SBPROFCOUNTS: Aperture pixel map too large! Trimming ...'
             
             ;; *** Temporary fix ***
@@ -72,16 +74,18 @@ Function mpaw_sbprof, img, maxaper, centroid, radii, photpar, err=err, cog=cog
             aper0_prof_err = aper_flux[1]
         Endif
         
+         
         ;; --- Cumulative profile ---
         apersize = size(aper_pix)
         numpix = long(apersize[1])
        ; aperarea = numpix*(1./(2.5))^2.
         aperarea = numpix
-        aper_prof[ii] = aper_flux[0]*aperarea
+        aper_prof[ii] = aper_flux[0]*float(aperarea)
         
         ;; --- Save aperture masks in a structure ---
-        help, apermask
+        ;help, apermask
         aper(ii).mask = apermask
+        
                 
     Endfor
 
@@ -97,8 +101,15 @@ Function mpaw_sbprof, img, maxaper, centroid, radii, photpar, err=err, cog=cog
         If not(keyword_set(err)) then annul_flux = mpaw_apercounts(annul_pix)
         annul_prof[ii] = annul_flux[0]
         annul_prof_err[ii] = annul_flux[1]
+        
+        
+        ;print, 'Annulus ', ii, annul_prof[ii]
     Endfor
     
+    ;cgplot, radii, aper_prof
+    
+   ; print, aper_prof
+;    stop
     
     ;; --- Get growth curve radii ---
     If not(keyword_set(cog)) then begin
@@ -118,6 +129,8 @@ Function mpaw_sbprof, img, maxaper, centroid, radii, photpar, err=err, cog=cog
         For ii = 0, numradii-1 do begin
         
             newflux = aper_prof_interp[ii]
+            
+          ;  print, newflux, totflux
             
             If (oldflux lt 0.2*totflux and newflux gt 0.2*totflux) then r20 = radii_interp[ii]
             If (oldflux lt 0.5*totflux and newflux gt 0.5*totflux) then r50 = radii_interp[ii]

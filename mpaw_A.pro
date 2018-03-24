@@ -2,7 +2,7 @@
 
 ;; Optionam arguments: -apermaskcut (if /aout set)
 
-Function mpaw_A, img, pixelmap, apermask, centroid, rmax, angle, apermaskcut, noisecorrect=noisecorrect, aout=aout
+Function mpaw_a, img, pixelmap, apermask, centroid, rmax, angle, apermaskcut, noisecorrect=noisecorrect, aout=aout
 
     cenpix_x = centroid[0]
     cenpix_y = centroid[1]
@@ -10,7 +10,7 @@ Function mpaw_A, img, pixelmap, apermask, centroid, rmax, angle, apermaskcut, no
     imgRot = rot(img,angle,1.0,cenpix_x,cenpix_y,/pivot)
     imgResid = abs(img - imgRot)
 
-    If keyword_set(acut) then $
+    If keyword_set(aout) then $
         netmask = apermask-apermaskcut $
             else netmask = apermask
     

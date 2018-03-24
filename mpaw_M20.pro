@@ -1,4 +1,4 @@
-Function mpaw_M20, img, pixmap
+Function mpaw_m20, img, pixmap
     
     imgsize = size(img)  
     npix = imgsize[1]   

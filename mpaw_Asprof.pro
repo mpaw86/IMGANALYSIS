@@ -1,4 +1,4 @@
-Function mpaw_Asprof, img, centroid, thresh, paths, getpixmaps=getpixmaps
+Function mpaw_asprof, img, centroid, thresh, paths, getpixmaps=getpixmaps
 
     outpar = {As:fltarr(n_elements(thresh)), As90:fltarr(n_elements(thresh))}
 

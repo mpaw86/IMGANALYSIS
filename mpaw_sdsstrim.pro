@@ -12,6 +12,8 @@ PRO mpaw_sdsstrim, imgname, newimgname, coords, centre=centre
     cenpix = lonarr(2)
     cenpix[0] = npix[0]/2 + 1
     cenpix[1] = npix[1]/2 + 1
+    
+    print, 'SIZE',imgsize
         
     ;; --- Check image size ---
     If not(keyword_set(centre)) then begin

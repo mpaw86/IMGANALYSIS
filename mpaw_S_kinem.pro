@@ -21,7 +21,7 @@
 ;	
 ;-
 
-Function mpaw_S_kinem, img, pixelmap, width, dir, name, print=print
+Function mpaw_s_kinem, img, pixelmap, width, dir, name, print=print
      
     imgSmooth = filter_image(img,smooth=width)
     imgResid = abs(img - imgSmooth)      

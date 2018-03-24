@@ -1,4 +1,4 @@
-Function mpaw_minMpix, img, objmask
+Function mpaw_minmpix, img, objmask
 
     imgsize = size(img)
     npix = imgsize[1]

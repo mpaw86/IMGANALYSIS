@@ -1,4 +1,4 @@
-Function mpaw_C, r_in, r_out
+Function mpaw_c, r_in, r_out
     
     C = 5. * alog10(r_out/r_in)
     c_check = finite(C)
