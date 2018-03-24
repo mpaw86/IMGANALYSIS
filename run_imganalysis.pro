@@ -87,7 +87,7 @@
 ;   Last modified by: Milena Pawlik, June 2017
 ;-
 
-PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutout, sdsshdr=sdsshdr, largeimg=largeimg, noskybgr=noskybgr, noimgclean=noimgclean, aperpixmap=aperpixmap, nopixelmap=nopixelmap, asprofile=asprofile, aout=aout, gfrac=gfrac, savepixelmap=savepixelmap, savecleanimg=savecleanimg, sav=sav
+PRO run_imganalysis, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutout, sdsshdr=sdsshdr, largeimg=largeimg, noskybgr=noskybgr, noimgclean=noimgclean, aperpixmap=aperpixmap, nopixelmap=nopixelmap, asprofile=asprofile, aout=aout, gfrac=gfrac, savepixelmap=savepixelmap, savecleanimg=savecleanimg, sav=sav
     
     ;;------------------------------------------------------------------
     ;; Directories
@@ -114,7 +114,7 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
     nsig_str = ['1sig','2sig','3sig','5sig','10sig']
  
     ;filters = ['u','g','r','i','z']
-   
+    filters=['r']
     
     ;;------------------------------------------------------------------
     ;; Generate aperture pixel maps
@@ -149,7 +149,7 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
         mpaw_makeaperpixmaps, imagesize, /silent
     Endif
     
-    ;For f = 0, n_elements(filters)-1 do begin
+    For f = 0, n_elements(filters)-1 do begin
         ;;------------------------------------------------------------------
         ;; Images
         ;;------------------------------------------------------------------
@@ -260,7 +260,6 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                         If keyword_set(largeimg) then limgpath = limgs[i]
                         name = strsplit(imgpath,dir_in,/extract,/regex)
                         name = strcompress(name,/remove)
-                       
                     Endif
                 Endif else begin
                     name = imgname
@@ -280,7 +279,7 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                 If keyword_set(largeimg) then limg = mrdfits(limgpath)
                 If keyword_set(softbias) then begin
                     img = img - 1000       
-                    limg = limg - 1000
+                    If keyword_set(largeimg) then limg = limg - 1000
                 Endif 
                 
                 out2(i).imgmin = min(img)
@@ -371,9 +370,9 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                 aperpixmap = mpaw_aperpixmap(npix,r_max,9,0.1)
                 ;aperpixmap = mpaw_aperpixmap(npix,cenpix,r_max,99,0.01)
         
-                bpix = mpaw_maxIpix(img,pixmap)
-                apix = mpaw_minApix(img,pixmap,aperpixmap)
-                mpix = mpaw_minMpix(img,pixmap)
+                bpix = mpaw_maxipix(img,pixmap)
+                apix = mpaw_minapix(img,pixmap,aperpixmap)
+                mpix = mpaw_minmpix(img,pixmap)
            
                 ;; --- Radial profiles and growth curve radii ---        
                 r_aper = findgen(npix/2)+1. 
@@ -410,25 +409,25 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                 proferr = result.proferr
          
                 ;; --- Concentration indices (see Bershady et al. 2000) 
-                C2080 = mpaw_C(rad[0],rad[2])
-                C5090 = mpaw_C(rad[1],rad[3])
+                C2080 = mpaw_c(rad[0],rad[2])
+                C5090 = mpaw_c(rad[1],rad[3])
         
                 ;; --- Asymmetry (see Conselice et al. 2000)
                 angle = 180.
-                result = mpaw_A(img,pixmap,aperpixmap,apix,rmax,angle,/noisecorrect)
+                result = mpaw_a(img,pixmap,aperpixmap,apix,rmax,angle,/noisecorrect)
                 A = result[0]
                 Abgr = result[1]
         
                 ;; --- Shape asymmetry ---
-                As = mpaw_A(pixmap,pixmap,aperpixmap,apix,rmax,angle)
-                As90 = mpaw_A(pixmap,pixmap,aperpixmap,apix,rmax,90.)
+                As = mpaw_a(pixmap,pixmap,aperpixmap,apix,rmax,angle)
+                As90 = mpaw_a(pixmap,pixmap,aperpixmap,apix,rmax,90.)
         
                 ;; --- Outer asymmetry ---
                 If keyword_set(aout) then begin
                     For i = 0, n_elements(rad)-1 do begin
                         aperpixmapcut = mpaw_aperpixmap(img,rad[i],9,0.1)
                         aperpixmapcut = mpaw_apercentre(aperpixmapcut,bpix)
-                        Ao = mpaw_A(img,pixmap,aperpixmap,apix,rmax,angle,aperpixmapcut,/noisecorrect,/aout)
+                        Ao = mpaw_a(img,pixmap,aperpixmap,apix,rmax,angle,aperpixmapcut,/noisecorrect,/aout)
                         If i eq 0 then Ao20 = Ao[0]
                         If i eq 1 then Ao50 = Ao[0]
                         If i eq 2 then Ao80 = Ao[0]
@@ -447,16 +446,16 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                     thresholds = skybgr[0] + nsig*skybgr[1]
                     ;; - Compute the asymmetries           
                     paths = dir_out+'pixmap_'+nsig_str+'_'+name
-                    asymmetries = mpaw_Asprof(img,apix,thresholds,paths)            
+                    asymmetries = mpaw_asprof(img,apix,thresholds,paths)            
                 Endif
         
-                ;; --- Clumpiness (see) ---
+                ;; --- Clumpiness ---
                 If rad[0] gt 0.0 then begin
                     width = (rcut = rad[0])
                     aperpixmapcut = mpaw_aperpixmap(npix,rcut,9,0.1)
                 
                     aperpixmapcut = mpaw_apercentre(aperpixmapcut,bpix)
-                    result = mpaw_S(img,pixmap,aperpixmap,width,aperpixmapcut,/noisecorrect,/sout)
+                    result = mpaw_s(img,pixmap,aperpixmap,width,aperpixmapcut,/noisecorrect,/sout)
                     S = result[0]
                     Sbgr = result[1]
                 Endif else begin
@@ -465,7 +464,7 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                 Endelse
         
                 ;; --- Gini index ---
-                G = mpaw_G(img,pixmap)
+                G = mpaw_g(img,pixmap)
         
                 ;; --- `Fractional' Gini indices ---
                 If keyword_set(gfrac) then begin
@@ -482,16 +481,16 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                         outpixmap90 = mpaw_pixelmapfrac(img,pixmap,0.9)
                         inpixmap90 = pixmap - outpixmap90
     
-                        G20 = mpaw_G(img,inpixmap20)
-                        G50 = mpaw_G(img,inpixmap50)
-                        G80 = mpaw_G(img,inpixmap80)
-                        G90 = mpaw_G(img,inpixmap90)
+                        G20 = mpaw_g(img,inpixmap20)
+                        G50 = mpaw_g(img,inpixmap50)
+                        G80 = mpaw_g(img,inpixmap80)
+                        G90 = mpaw_g(img,inpixmap90)
         
                     Endfor
                 Endif
         
                 ;; --- Momemnt of light ---
-                M20 = mpaw_M20(img,pixmap)
+                M20 = mpaw_m20(img,pixmap)
           
                 ;; *** If photometric calibration parameters known ***
                 If keyword_set(sdsshdr) then begin
@@ -593,15 +592,15 @@ PRO RUN_IMGANALYSIS, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutou
                 write_csv, dir_out+outfile+'.csv', out, header=hdr_out
                 write_csv, dir_out+outfile2+'.csv', out2, header=hdr_out2
        
-                save, out, filename=dir_out+outfile+'.sav'
-                save, out1, filename=dir_out+outfile1+'.sav'
-                save, out2, filename=dir_out+outfile2+'.sav'
+                save, out, filename=dir_out+outfile+'_test.sav'
+                save, out1, filename=dir_out+outfile1+'_test.sav'
+                save, out2, filename=dir_out+outfile2+'_test.sav'
                 If keyword_set(aout) or keyword_set(gfrac) then save, out3, filename=dir_out+outfile3+'.sav'
                 If keyword_set(asprofile)then save, out4, filename=dir_out+outfile4+'.sav'
                 
             Endif
             
             Endfor
-        ;Endfor ;; SDSS filters
+        Endfor ;; SDSS filters
         
     END
