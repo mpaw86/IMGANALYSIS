@@ -12,7 +12,7 @@
 ;            
 ;       INPUT: 
 ;       dir: a string - path to the working directory
-;       sample: a string pointing to the sample to be analysed
+;       sample: a string name of the sample to be analysed
 ;  
 ;       OPTIONAL INPUT:
 ;       imgname : can specifiy to analyse a single image, instead of whole sample
@@ -20,7 +20,6 @@
 ;       OUTPUT:
 ;       The order in the output catalog '*_structpar.csv' matches that in the list of images ('*_imginfo.csv')
 ;            
-;  
 ;	
 ; KEYWORD PARAMETERS:
 ;       
@@ -30,10 +29,10 @@
 ;       APERPIXMAP: Set to create binary maps of aperture pixels 
 ;            - required for computation of surface-brightness profiles;
 ;            - time consuming so best to do only once if possible;
-;            ** Set image size in pixels - line 83;         
+;            ** Set image size in pixels - line 109 (want the pixel map to macth the maximum size of images to be analysed);         
 ;       NOSKYBGR: Set if the infput images already sky-subtracted
 ;       NOPIXELMAP: Set if binary pixel map already created
-;       NOIMGCLEAN: Set if image already cleaned (of nearby sources external to the pixel map)
+;       NOIMGCLEAN: Set if image already cleaned (of nearby sources **external** to the pixel map)
 ;            
 ;       ASPROFILE: Set to compute shape asymmetry profiles - time consuming
 ;       AOUT: Set to compute outer asymmetries
@@ -60,16 +59,16 @@
 ;       - mpaw_aperpixmap.pro
 ;       - mpaw_apercentre.pro
 ;            
-;       - mpaw_maxIpix.pro
-;       - mpaw_minApix.pro
-;       - mpaw_minMpix.pro
+;       - mpaw_maxipix.pro
+;       - mpaw_minapix.pro
+;       - mpaw_minmpix.pro
 ;            
-;       - mpaw_C.pro  
-;       - mpaw_A.pro
-;       - mpaw_S.pro
-;       - mpaw_G.pro
-;       - mpaw_M20.pro
-;       - mpaw_Asprof.pro
+;       - mpaw_c.pro  
+;       - mpaw_a.pro
+;       - mpaw_s.pro
+;       - mpaw_g.pro
+;       - mpaw_m20.pro
+;       - mpaw_asprof.pro
 ;            
 ;       - mpaw_apercounts.pro   
 ;       - mpaw_mag.pro  
@@ -79,12 +78,12 @@
 ;       - mpaw_fitsersic.pro
 ;       
 ; NOTES: 
-;
+;   The function asprof.pro is currently slow and still needs some testing.
 ;  
 ; MODIFICATION HISTORY:
 ;
 ; 	Written by:	Milena Pawlik, August 2016, based on an older version from March 2014. 
-;   Last modified by: Milena Pawlik, June 2017
+;   Last modified by: Milena Pawlik, March 2018
 ;-
 
 PRO run_imganalysis, dir, sample, imgname, imglist=imglist, sdsscutout=sdsscutout, sdsshdr=sdsshdr, largeimg=largeimg, noskybgr=noskybgr, noimgclean=noimgclean, aperpixmap=aperpixmap, nopixelmap=nopixelmap, asprofile=asprofile, aout=aout, gfrac=gfrac, savepixelmap=savepixelmap, savecleanimg=savecleanimg, sav=sav
